@@ -44,8 +44,3 @@ You'll also need to include the following in your POM file:
 </distributionManagement>
 ```
 Maven should then deploy to Artifactory during the "deploy" lifecycle phase.
-
-## License
-
-This project is licensed under the GPL v2 License - see the
-[LICENSE.md](https://github.com/UKHomeOffice/mma-docker-java8-mvn/blob/master/LICENSE) file for details
