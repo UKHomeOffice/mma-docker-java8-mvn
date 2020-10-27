@@ -1,16 +1,15 @@
 kind: pipeline
 name: default
-type: docker
-
-environment:
-  DOCKER_USERNAME:
-    from_secret: docker_username
-  DOCKER_PASSWORD:
-    from_secret: docker_password
+type: kubernetes
 
 steps:
   - name: build-image
     image: docker:dind
+    environment:
+      DOCKER_USERNAME:
+        from_secret: docker_username
+      DOCKER_PASSWORD:
+        from_secret: docker_password
     commands:
       # wait for docker service to be up before running docker build
       - n=0; while [ "$n" -lt 60 ] && [ ! -e /var/run/docker.sock ]; do n=$(( n + 1 )); sleep 1; done  
@@ -23,6 +22,11 @@ steps:
 
   - name: push-image-to-quay
     image: docker:dind
+    environment:
+      DOCKER_USERNAME:
+        from_secret: docker_username
+      DOCKER_PASSWORD:
+        from_secret: docker_password
     commands:
       - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD quay.io
       - docker tag mma-java8-mvn:$${DRONE_COMMIT_SHA} quay.io/ukhomeofficedigital/mma-java8-mvn:$${DRONE_COMMIT_SHA}
@@ -38,6 +42,11 @@ steps:
 
   - name: tagged-image-to-quay 
     image: docker:dind
+    environment:
+      DOCKER_USERNAME:
+        from_secret: docker_username
+      DOCKER_PASSWORD:
+        from_secret: docker_password
     commands: 
       - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD quay.io
       - docker tag mma-java8-mvn:$${DRONE_COMMIT_SHA} quay.io/ukhomeofficedigital/mma-java8-mvn:$${DRONE_TAG}
