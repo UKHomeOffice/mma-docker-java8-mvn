@@ -24,9 +24,9 @@ steps:
     image: docker:dind
     environment:
       DOCKER_USERNAME:
-        from_secret: docker_username
+        from_secret: DOCKER_USERNAME
       DOCKER_PASSWORD:
-        from_secret: docker_password
+        from_secret: DOCKER_PASSWORD
     commands:
       - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD quay.io
       - docker tag mma-java8-mvn:$${DRONE_COMMIT_SHA} quay.io/ukhomeofficedigital/mma-java8-mvn:$${DRONE_COMMIT_SHA}
@@ -47,7 +47,7 @@ steps:
 #         from_secret: docker_username
 #       DOCKER_PASSWORD:
 #         from_secret: docker_password
-#     commands:
+#     commands: 
 #       - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD quay.io
 #       - docker tag mma-java8-mvn:$${DRONE_COMMIT_SHA} quay.io/ukhomeofficedigital/mma-java8-mvn:$${DRONE_TAG}
 #       - docker push quay.io/ukhomeofficedigital/mma-java8-mvn:$${DRONE_TAG}
