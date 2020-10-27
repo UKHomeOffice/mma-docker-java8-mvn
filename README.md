@@ -25,7 +25,6 @@ steps:
     - pull_request
 
 ```
-
 To deploy artifacts to Artifactory, please pass valid credentials via the ARTIFACTORY\_USERNAME and ARTIFACTORY\_PASSWORD environment variables.
 
 You'll also need to include the following in your POM file:
