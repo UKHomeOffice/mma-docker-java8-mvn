@@ -1,6 +1,6 @@
 kind: pipeline
 name: default
-type: kubernetes
+type: docker
 
 environment:
   DOCKER_USERNAME:
