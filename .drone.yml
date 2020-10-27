@@ -3,67 +3,103 @@ name: default
 type: kubernetes
 
 steps:
-  - name: build-image
-    image: docker:dind
+  - name: push_to_quay
+    image: plugins/docker
+    settings:
+      registry: quay.io
+      repo: quay.io/ukhomeofficedigital/mma-java8-mvn
+      tags: 
+        - ${DRONE_COMMIT_SHA}
+        - latest
     environment:
-      DOCKER_USERNAME:
-        from_secret: docker_username
       DOCKER_PASSWORD:
+        from_secret: docker_username
+      DOCKER_USERNAME: 
         from_secret: docker_password
-    commands:
-      # wait for docker service to be up before running docker build
-      - n=0; while [ "$n" -lt 60 ] && [ ! -e /var/run/docker.sock ]; do n=$(( n + 1 )); sleep 1; done  
-      - docker build -t mma-java8-mvn:$${DRONE_COMMIT_SHA} .
-    volumes:
-    - name: dockersock
-      path: /var/run
     when:
-      event: [push, tag]
+      branch:
+      - master
+      event:
+      - push
 
-  - name: push-image-to-quay
-    image: docker:dind
+steps:
+  - name: tagged-image-to-quay
+    image: plugins/docker
+    settings:
+      registry: quay.io
+      repo: quay.io/ukhomeofficedigital/mma-java8-mvn
+      tags: ${DRONE_TAG}
     environment:
-      DOCKER_USERNAME:
-        from_secret: docker_username
       DOCKER_PASSWORD:
-        from_secret: docker_password
-    commands:
-      - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD quay.io
-      - docker tag mma-java8-mvn:$${DRONE_COMMIT_SHA} quay.io/ukhomeofficedigital/mma-java8-mvn:$${DRONE_COMMIT_SHA}
-      - docker tag mma-java8-mvn:$${DRONE_COMMIT_SHA} quay.io/ukhomeofficedigital/mma-java8-mvn:latest
-      - docker push quay.io/ukhomeofficedigital/mma-java8-mvn:$${DRONE_COMMIT_SHA}
-      - docker push quay.io/ukhomeofficedigital/mma-java8-mvn:latest
-    volumes:
-    - name: dockersock
-      path: /var/run      
-    when:
-      event: push
-      branch: master
-
-  - name: tagged-image-to-quay 
-    image: docker:dind
-    environment:
-      DOCKER_USERNAME:
         from_secret: docker_username
-      DOCKER_PASSWORD:
+      DOCKER_USERNAME: 
         from_secret: docker_password
-    commands: 
-      - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD quay.io
-      - docker tag mma-java8-mvn:$${DRONE_COMMIT_SHA} quay.io/ukhomeofficedigital/mma-java8-mvn:$${DRONE_TAG}
-      - docker push quay.io/ukhomeofficedigital/mma-java8-mvn:$${DRONE_TAG}
-    volumes:
-    - name: dockersock
-      path: /var/run  
     when:
       event: tag
+      
+      
+# steps:
+#   - name: build-image
+#     image: docker:dind
+#     environment:
+#       DOCKER_USERNAME:
+#         from_secret: docker_username
+#       DOCKER_PASSWORD:
+#         from_secret: docker_password
+#     commands:
+#       # wait for docker service to be up before running docker build
+#       - n=0; while [ "$n" -lt 60 ] && [ ! -e /var/run/docker.sock ]; do n=$(( n + 1 )); sleep 1; done  
+#       - docker build -t mma-java8-mvn:$${DRONE_COMMIT_SHA} .
+#     volumes:
+#     - name: dockersock
+#       path: /var/run
+#     when:
+#       event: [push, tag]
 
-services:
-- name: docker
-  image: docker:dind
-  volumes:
-  - name: dockersock
-    path: /var/run
+#   - name: push-image-to-quay
+#     image: docker:dind
+#     environment:
+#       DOCKER_USERNAME:
+#         from_secret: docker_username
+#       DOCKER_PASSWORD:
+#         from_secret: docker_password
+#     commands:
+#       - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD quay.io
+#       - docker tag mma-java8-mvn:$${DRONE_COMMIT_SHA} quay.io/ukhomeofficedigital/mma-java8-mvn:$${DRONE_COMMIT_SHA}
+#       - docker tag mma-java8-mvn:$${DRONE_COMMIT_SHA} quay.io/ukhomeofficedigital/mma-java8-mvn:latest
+#       - docker push quay.io/ukhomeofficedigital/mma-java8-mvn:$${DRONE_COMMIT_SHA}
+#       - docker push quay.io/ukhomeofficedigital/mma-java8-mvn:latest
+#     volumes:
+#     - name: dockersock
+#       path: /var/run      
+#     when:
+#       event: push
+#       branch: master
 
-volumes:
-- name: dockersock
-  temp: {}      
+#   - name: tagged-image-to-quay 
+#     image: docker:dind
+#     environment:
+#       DOCKER_USERNAME:
+#         from_secret: docker_username
+#       DOCKER_PASSWORD:
+#         from_secret: docker_password
+#     commands: 
+#       - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD quay.io
+#       - docker tag mma-java8-mvn:$${DRONE_COMMIT_SHA} quay.io/ukhomeofficedigital/mma-java8-mvn:$${DRONE_TAG}
+#       - docker push quay.io/ukhomeofficedigital/mma-java8-mvn:$${DRONE_TAG}
+#     volumes:
+#     - name: dockersock
+#       path: /var/run  
+#     when:
+#       event: tag
+
+# services:
+# - name: docker
+#   image: docker:dind
+#   volumes:
+#   - name: dockersock
+#     path: /var/run
+
+# volumes:
+# - name: dockersock
+#   temp: {}      
