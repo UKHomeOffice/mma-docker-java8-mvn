@@ -10,7 +10,7 @@ ENV MVN_VERSION=3.6.3
  RUN yum clean all && \
     yum install yum-plugin-ovl -y && \
     yum update -y && \
-    yum install -y java-1.8.0-openjdk-devel && \
+    yum install -y git java-1.8.0-openjdk-devel && \
     yum clean all && \
     rm -rf /var/cache/yum && \
     rpm --rebuilddb
