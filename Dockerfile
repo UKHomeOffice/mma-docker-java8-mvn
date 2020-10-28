@@ -13,9 +13,13 @@ ENV MVN_VERSION=3.6.3
     yum install -y git java-1.8.0-openjdk-devel && \
     yum clean all && \
     rm -rf /var/cache/yum && \
-    rpm --rebuilddb
+    rpm --rebuilddb  
 
  ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk
+
+ RUN yum update -y && \
+    yum clean all && \
+    rpm --rebuilddb  
 
  RUN mkdir -p ${HOME}/.m2/ && \
     curl -sS \
