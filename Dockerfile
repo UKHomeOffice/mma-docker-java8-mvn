@@ -1,38 +1,22 @@
-FROM centos:centos7
+FROM openjdk:8-jdk
 
-RUN echo "exclude=filesystem*" >> /etc/yum.conf
+ARG MAVEN_VERSION=3.6.3
+ARG USER_HOME_DIR="/root"
+ARG SHA=c35a1803a6e70a126e80b2b3ae33eed961f83ed74d18fcd16909b2d44d7dada3203f1ffe726c17ef8dcca2dcaa9fca676987befeadc9b9f759967a8cb77181c0
+ARG BASE_URL=https://apache.osuosl.org/maven/maven-3/${MAVEN_VERSION}/binaries
 
-ENV HOME /root
-ENV LANG en_US.UTF-8
-ENV LC_ALL en_US.UTF-8
-ENV MVN_VERSION=3.6.3
+RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
+  && curl -fsSL -o /tmp/apache-maven.tar.gz ${BASE_URL}/apache-maven-${MAVEN_VERSION}-bin.tar.gz \
+  && echo "${SHA}  /tmp/apache-maven.tar.gz" | sha512sum -c - \
+  && tar -xzf /tmp/apache-maven.tar.gz -C /usr/share/maven --strip-components=1 \
+  && rm -f /tmp/apache-maven.tar.gz \
+  && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
 
-RUN yum clean all && \
-    yum update -y && \
-    yum install yum-plugin-ovl git java-1.8.0-openjdk-devel -y && \
-    yum update -y && \
-    yum clean all && \
-    rm -rf /var/cache/yum && \
-    rpm --rebuilddb  
+ENV MAVEN_HOME /usr/share/maven
+ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
 
-ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk
+COPY mvn-entrypoint.sh /usr/local/bin/mvn-entrypoint.sh
+COPY settings-docker.xml /usr/share/maven/ref/
 
-RUN mkdir -p ${HOME}/.m2/ && \
-    curl -sS \
-    http://www.mirrorservice.org/sites/ftp.apache.org/maven/maven-3/${MVN_VERSION}/binaries/apache-maven-${MVN_VERSION}-bin.tar.gz \
-    -o /tmp/apache-maven-${MVN_VERSION}-bin.tar.gz && \
-    tar xvzf /tmp/apache-maven-${MVN_VERSION}-bin.tar.gz -C /tmp && \
-    mv /tmp/apache-maven-${MVN_VERSION} /var/local/ && \
-    ln -s /var/local/apache-maven-${MVN_VERSION}/bin/mvnyjp /usr/local/bin/mvnyjp && \
-    ln -s /var/local/apache-maven-${MVN_VERSION}/bin/mvnDebug /usr/local/bin/mvnDebug && \
-    ln -s /var/local/apache-maven-${MVN_VERSION}/bin/mvn /usr/local/bin/mvn
-
-RUN mkdir /app
-
-WORKDIR /app
-
-COPY settings.xml ${HOME}/.m2/
-
-ENTRYPOINT ["/bin/bash", "-c"]
-
-CMD ["mvn -v"]
+ENTRYPOINT ["/usr/local/bin/mvn-entrypoint.sh"]
+CMD ["mvn"]

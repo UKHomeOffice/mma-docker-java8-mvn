@@ -34,8 +34,8 @@ steps:
       # - docker push quay.io/ukhomeofficedigital/mma-java8-mvn:$${DRONE_COMMIT_SHA}
       # - docker push quay.io/ukhomeofficedigital/mma-java8-mvn:latest
 
-      - docker tag mma-java8-mvn:$${DRONE_COMMIT_SHA} quay.io/ukhomeofficedigital/mma-java8-mvn:yum
-      - docker push quay.io/ukhomeofficedigital/mma-java8-mvn:yum
+      - docker tag mma-java8-mvn:$${DRONE_COMMIT_SHA} quay.io/ukhomeofficedigital/mma-java8-mvn:openjdk8
+      - docker push quay.io/ukhomeofficedigital/mma-java8-mvn:openjdk8
     volumes:
     - name: dockersock
       path: /var/run      
