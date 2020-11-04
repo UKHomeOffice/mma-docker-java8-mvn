@@ -1,4 +1,4 @@
-FROM centos:centos8
+FROM centos:centos7
 
 RUN echo "exclude=filesystem*" >> /etc/yum.conf
 
@@ -9,7 +9,7 @@ ENV MVN_VERSION=3.6.3
 
 RUN yum clean all && \
     yum update -y && \
-    yum install git java-1.8.0-openjdk-devel -y && \
+    yum install yum-plugin-ovl git java-1.8.0-openjdk-devel -y && \
     yum update -y && \
     yum clean all && \
     rm -rf /var/cache/yum && \
