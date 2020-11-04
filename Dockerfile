@@ -7,12 +7,9 @@ ENV LANG en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
 ENV MVN_VERSION=3.6.3
 
-RUN yum clean all && \
-    yum update -y && \
-    yum install yum-plugin-ovl git java-1.8.0-openjdk-devel -y && \
-    yum update -y && \
-    yum clean all && \
-    rm -rf /var/cache/yum
+RUN apk update -y && && apk upgrade && \
+    apk add git curl java-1.8.0-openjdk-devel -y && \
+    apk update -y
 
 ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk
 
