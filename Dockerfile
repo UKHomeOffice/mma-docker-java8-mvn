@@ -12,8 +12,7 @@ RUN yum clean all && \
     yum install yum-plugin-ovl git java-1.8.0-openjdk-devel -y && \
     yum update -y && \
     yum clean all && \
-    rm -rf /var/cache/yum && \
-    rpm --rebuilddb  
+    rm -rf /var/cache/yum
 
 ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk
 
