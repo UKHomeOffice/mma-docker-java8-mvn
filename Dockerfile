@@ -7,7 +7,7 @@ ENV LANG en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
 ENV MVN_VERSION=3.6.3
 
-RUN apk update -y && && apk upgrade && \
+RUN apk update -y && apk upgrade && \
     apk add git curl java-1.8.0-openjdk-devel -y && \
     apk update -y
 
