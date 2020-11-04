@@ -29,10 +29,13 @@ steps:
         from_secret: docker_password
     commands:
       - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD quay.io
-      - docker tag mma-java8-mvn:$${DRONE_COMMIT_SHA} quay.io/ukhomeofficedigital/mma-java8-mvn:$${DRONE_COMMIT_SHA}
-      - docker tag mma-java8-mvn:$${DRONE_COMMIT_SHA} quay.io/ukhomeofficedigital/mma-java8-mvn:latest
-      - docker push quay.io/ukhomeofficedigital/mma-java8-mvn:$${DRONE_COMMIT_SHA}
-      - docker push quay.io/ukhomeofficedigital/mma-java8-mvn:latest
+      # - docker tag mma-java8-mvn:$${DRONE_COMMIT_SHA} quay.io/ukhomeofficedigital/mma-java8-mvn:$${DRONE_COMMIT_SHA}
+      # - docker tag mma-java8-mvn:$${DRONE_COMMIT_SHA} quay.io/ukhomeofficedigital/mma-java8-mvn:latest
+      # - docker push quay.io/ukhomeofficedigital/mma-java8-mvn:$${DRONE_COMMIT_SHA}
+      # - docker push quay.io/ukhomeofficedigital/mma-java8-mvn:latest
+
+      - docker tag mma-java8-mvn:$${DRONE_COMMIT_SHA} quay.io/ukhomeofficedigital/mma-java8-mvn:yum
+      - docker push quay.io/ukhomeofficedigital/mma-java8-mvn:yum
     volumes:
     - name: dockersock
       path: /var/run      
