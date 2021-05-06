@@ -19,7 +19,16 @@ steps:
     - n=0; while [ "$n" -lt 60 ] && [ ! docker stats --no-stream ]; do n=$(( n + 1 )); sleep 1; done
     - docker build -t mma-java8-mvn:$${DRONE_COMMIT_SHA} .
   when:
-    event: [push, tag]
+    event: push
+
+- name: scan-image
+  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/anchore-submission:latest
+  pull: always
+  environment:
+    IMAGE_NAME: mma-java8-mvn:${DRONE_COMMIT_SHA}
+  when:
+    event:
+      - push
 
 - name: push_to_quay
   image: plugins/docker
@@ -58,4 +67,10 @@ steps:
 services:
 - name: docker
   image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
+
+- name: anchore-submission-server
+  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/anchore-submission:latest
+  pull: always
+  commands:
+    - /run.sh server
 
