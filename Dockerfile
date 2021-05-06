@@ -5,7 +5,7 @@ RUN echo "exclude=filesystem*" >> /etc/yum.conf
 ENV HOME /root
 ENV LANG en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
-ENV MVN_VERSION=3.6.3
+ENV MVN_VERSION=3.8.1
 
 RUN yum clean all && \
     yum update -y && \
