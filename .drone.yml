@@ -30,7 +30,7 @@ steps:
   environment:
     DOCKER_PASSWORD:
       from_secret: QUAY_PASSWORD
-    DOCKER_USERNAME: ukhomeofficedigital+mma-java8-mvn
+    DOCKER_USERNAME: ukhomeofficedigital+mma_robot_user
   when:
     branch:
     - master
@@ -48,7 +48,7 @@ steps:
   environment:
     DOCKER_PASSWORD:
       from_secret: QUAY_PASSWORD
-    DOCKER_USERNAME: ukhomeofficedigital+mma-java8-mvn
+    DOCKER_USERNAME: ukhomeofficedigital+mma_robot_user
   when:
     branch:
     - master
