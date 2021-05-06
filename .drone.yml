@@ -29,8 +29,9 @@ steps:
     tags: ${DRONE_COMMIT_SHA}
   environment:
     DOCKER_PASSWORD:
-      from_secret: QUAY_PASSWORD
-    DOCKER_USERNAME: ukhomeofficedigital+mma_robot_user
+      from_secret: DOCKER_PASSWORD
+    DOCKER_USERNAME:
+      from_secret: DOCKER_USERNAME
   when:
     branch:
     - master
