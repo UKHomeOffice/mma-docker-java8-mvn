@@ -1,5 +1,5 @@
 # mma-docker-java8-mvn
-base docker image with java8 and maven
+base docker image with Java 8 and maven
 
 Docker image with java8 and maven. Not intended to use as a base for java projects, just for building.
 
