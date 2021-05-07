@@ -38,8 +38,9 @@ steps:
     tags: ${DRONE_COMMIT_SHA}
   environment:
     DOCKER_PASSWORD:
-      from_secret: QUAY_PASSWORD
-    DOCKER_USERNAME: ukhomeofficedigital+mma-java8-mvn
+      from_secret: DOCKER_PASSWORD
+    DOCKER_USERNAME:
+      from_secret: DOCKER_USERNAME
   when:
     branch:
     - master
@@ -57,7 +58,7 @@ steps:
   environment:
     DOCKER_PASSWORD:
       from_secret: QUAY_PASSWORD
-    DOCKER_USERNAME: ukhomeofficedigital+mma-java8-mvn
+    DOCKER_USERNAME: ukhomeofficedigital+mma_robot_user
   when:
     branch:
     - master
